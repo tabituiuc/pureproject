@@ -53,7 +53,7 @@ public class ClientActivity extends Activity {
 		is = getAssets().open("test.png");
 		fileRead = BitmapFactory.decodeStream(is);
 		imageView.setImageBitmap(fileRead);
-		
+		// test
 	}
 
 	private OnClickListener connectListener = new OnClickListener() {
