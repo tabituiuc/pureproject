@@ -45,15 +45,21 @@ public class ClientActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_client);
 		
-		serverIp = (EditText) findViewById(R.id.server_ip);
-	    connectPhones = (Button) findViewById(R.id.connect_phones);
+		serverIp = (EditText) findViewById(R.id.serverip);
+	    connectPhones = (Button) findViewById(R.id.sendButton);
 	    connectPhones.setOnClickListener(connectListener);
 		
 	    imageView = (ImageView) findViewById(R.id.toSend);
-		is = getAssets().open("test.png");
+		try {
+			is = getAssets().open("test.png");
+		} catch (IOException e) {
+			Log.d("Local", "Image Open Error");
+			e.printStackTrace();
+		}
 		fileRead = BitmapFactory.decodeStream(is);
 		imageView.setImageBitmap(fileRead);
 		// test
+		// test2
 	}
 
 	private OnClickListener connectListener = new OnClickListener() {

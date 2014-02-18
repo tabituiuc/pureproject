@@ -3,6 +3,7 @@ package com.uiuc.puretest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
@@ -39,7 +40,7 @@ public class ServerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_server);
         serverStatus = (TextView) findViewById(R.id.server_status);
-        imageView = (ImageView) findViewByID(R.id.outputImage);
+        imageView = (ImageView) findViewById(R.id.outputImage);
         SERVERIP = getLocalIpAddress();
  
         Thread fst = new Thread(new ServerThread());
@@ -116,7 +117,7 @@ public class ServerActivity extends Activity {
                 NetworkInterface intf = en.nextElement();
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) { return inetAddress.getHostAddress().toString(); }
+                    if (!inetAddress.isLoopbackAddress() &&inetAddress instanceof Inet4Address) { return inetAddress.getHostAddress().toString(); }
                 }
             }
         } catch (SocketException ex) {
