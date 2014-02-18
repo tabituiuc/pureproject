@@ -4,10 +4,10 @@
     android:versionCode="1"
     android:versionName="1.0" >
     
-    <user-permission android:name="android.permission.ACCESS_NETWORK_STATE"
-    				 android:name="android.permission.ACCESS_WIFI_STATE"
-           			 android:name="android.permission.INTERNET"
-           			 android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <user-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <user-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <user-permission android:name="android.permission.INTERNET"/>
+    <user-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
 
     <uses-sdk
         android:minSdkVersion="8"
