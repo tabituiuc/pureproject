@@ -8,9 +8,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
+    <Button
+        android:id="@+id/enterServer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Server"
+        android:width="300dp" />
+
+    <Button
+        android:id="@+id/enterClient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/enterServer"
+        android:layout_below="@+id/enterServer"
+        android:layout_marginTop="63dp"
+        android:text="Client"
+        android:width="300dp" />
 
 </RelativeLayout>
