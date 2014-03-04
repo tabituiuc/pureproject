@@ -58,8 +58,7 @@ public class ClientActivity extends Activity {
 		}
 		fileRead = BitmapFactory.decodeStream(is);
 		imageView.setImageBitmap(fileRead);
-		// test
-		// test2
+
 	}
 
 	private OnClickListener connectListener = new OnClickListener() {
