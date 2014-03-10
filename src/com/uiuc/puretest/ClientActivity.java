@@ -2,8 +2,6 @@ package com.uiuc.puretest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -12,7 +10,7 @@ import org.opencv.android.InstallCallbackInterface;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
-import org.opencv.core.*;
+import org.opencv.core.Mat;
 
 import android.os.Bundle;
 import android.os.Handler;
