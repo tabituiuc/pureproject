@@ -11,6 +11,7 @@ import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +47,8 @@ implements LoaderCallbackInterface {
 
 	 private Mat tmp;
 	 
+	 private boolean openCVLoaded = false;
+	 
 	 private BitmapFactory.Options bmpFactoryOptions;
 	
 	 private BaseLoaderCallback mOpenCVCallback = new BaseLoaderCallback(this) {
@@ -54,10 +57,8 @@ implements LoaderCallbackInterface {
 		     switch (status) {
 		         case LoaderCallbackInterface.SUCCESS:
 		         {
-		         
-		             tmp=new Mat();
-		             Utils.bitmapToMat(fileRead, tmp);
-		             Log.i("MAT", "I'm here");
+		        	 openCVLoaded = true;
+		        	 
 		         } break;
 		         default:
 		         {
@@ -98,6 +99,13 @@ implements LoaderCallbackInterface {
 								public void run() {
 									
 									try {
+										while(!openCVLoaded){
+											Log.e("OpenCV", "OpenCVNotLoaded");
+										}
+										manipulateImage(fileRead);
+										
+										
+										//send image
 										fileRead.compress(Bitmap.CompressFormat.PNG, 100, socket.getOutputStream());
 									} catch (IOException e) {
 										Log.e("ClientActivity", "C: Error");
@@ -120,6 +128,14 @@ implements LoaderCallbackInterface {
 		            }
 		        }
 		    }
+		    
+    private void manipulateImage(Bitmap input){
+    	Mat bmp = new Mat();
+		Utils.bitmapToMat(input, bmp);
+		Rect faceRect = new Rect();
+		// some code to detect face
+		
+    };
 		    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

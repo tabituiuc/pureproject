@@ -11,12 +11,29 @@ public class MainActivity extends Activity {
 	
 	Button serverSide;
 	Button clientSide;
+	
+	Button foo;
+	
+	int a;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		View test = findViewById(R.id.button2);
+		foo = (Button) test;
 		serverSide = (Button) findViewById(R.id.enterServer);
 		clientSide = (Button) findViewById(R.id.enterClient);
+		
+		
+		foo.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				a = 1;
+				
+				
+			}
+		});
 		
 		serverSide.setOnClickListener(new View.OnClickListener() {
 			
