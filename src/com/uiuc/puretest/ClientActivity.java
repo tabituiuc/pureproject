@@ -166,7 +166,6 @@ implements LoaderCallbackInterface {
 		    
     private Bitmap manipulateImage(Bitmap input){
     	
-    	int absoluteFaceSize = (int) (input.getHeight() * 0.2);
     	Mat matVer = new Mat();
     	Mat grayscaleImage = new Mat(input.getHeight(), input.getWidth(), CvType.CV_8UC4);
 		Utils.bitmapToMat(input, matVer);
@@ -178,8 +177,7 @@ implements LoaderCallbackInterface {
       
         // Use the classifier to detect faces
         if (cascadeClassifier != null) {
-            cascadeClassifier.detectMultiScale(grayscaleImage, faces, 1.1, 2, 2,
-                    new Size(absoluteFaceSize, absoluteFaceSize), new Size());
+            cascadeClassifier.detectMultiScale(grayscaleImage, faces);
         }
  
  
