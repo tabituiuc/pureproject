@@ -1,5 +1,7 @@
 package com.uiuc.puretest;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -10,12 +12,20 @@ import org.opencv.android.InstallCallbackInterface;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -50,6 +60,8 @@ implements LoaderCallbackInterface {
 	 private boolean openCVLoaded = false;
 	 
 	 private BitmapFactory.Options bmpFactoryOptions;
+	 
+	 private CascadeClassifier cascadeClassifier;
 	
 	 private BaseLoaderCallback mOpenCVCallback = new BaseLoaderCallback(this) {
 		 @Override
@@ -57,6 +69,28 @@ implements LoaderCallbackInterface {
 		     switch (status) {
 		         case LoaderCallbackInterface.SUCCESS:
 		         {
+		        	 try {
+		                 // Copy the resource into a temp file so OpenCV can load it
+		                 InputStream is = getResources().openRawResource(R.raw.lbpcascade_frontalface);
+		                 File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
+		                 File mCascadeFile = new File(cascadeDir, "lbpcascade_frontalface.xml");
+		                 FileOutputStream os = new FileOutputStream(mCascadeFile);
+		      
+		      
+		                 byte[] buffer = new byte[4096];
+		                 int bytesRead;
+		                 while ((bytesRead = is.read(buffer)) != -1) {
+		                     os.write(buffer, 0, bytesRead);
+		                 }
+		                 is.close();
+		                 os.close();
+		      
+		      
+		                 // Load the cascade classifier
+		                 cascadeClassifier = new CascadeClassifier(mCascadeFile.getAbsolutePath());
+		             } catch (Exception e) {
+		                 Log.e("OpenCVActivity", "Error loading cascade", e);
+		             }
 		        	 openCVLoaded = true;
 		        	 
 		         } break;
@@ -72,6 +106,8 @@ implements LoaderCallbackInterface {
 			 
 		        @Override
 		        public void onClick(View v) {
+		        	fileRead = manipulateImage(fileRead);
+					imageView.setImageBitmap(fileRead);
 		            if (!connected) {
 		                serverIpAddress = serverIp.getText().toString();
 		                if (!serverIpAddress.equals("")) {
@@ -102,9 +138,8 @@ implements LoaderCallbackInterface {
 										while(!openCVLoaded){
 											Log.e("OpenCV", "OpenCVNotLoaded");
 										}
-										manipulateImage(fileRead);
-										
-										
+										fileRead = manipulateImage(fileRead);
+										imageView.setImageBitmap(fileRead);
 										//send image
 										fileRead.compress(Bitmap.CompressFormat.PNG, 100, socket.getOutputStream());
 									} catch (IOException e) {
@@ -129,10 +164,33 @@ implements LoaderCallbackInterface {
 		        }
 		    }
 		    
-    private void manipulateImage(Bitmap input){
-    	Mat bmp = new Mat();
-		Utils.bitmapToMat(input, bmp);
-		Rect faceRect = new Rect();
+    private Bitmap manipulateImage(Bitmap input){
+    	
+    	int absoluteFaceSize = (int) (input.getHeight() * 0.2);
+    	Mat matVer = new Mat();
+    	Mat grayscaleImage = new Mat(input.getHeight(), input.getWidth(), CvType.CV_8UC4);
+		Utils.bitmapToMat(input, matVer);
+        Imgproc.cvtColor(matVer, grayscaleImage, Imgproc.COLOR_RGBA2RGB);
+        
+        
+        MatOfRect faces = new MatOfRect();
+ 
+      
+        // Use the classifier to detect faces
+        if (cascadeClassifier != null) {
+            cascadeClassifier.detectMultiScale(grayscaleImage, faces, 1.1, 2, 2,
+                    new Size(absoluteFaceSize, absoluteFaceSize), new Size());
+        }
+ 
+ 
+        // If there are any faces found, draw a rectangle around it
+        Rect[] facesArray = faces.toArray();
+        for (int i = 0; i <facesArray.length; i++)
+            Core.rectangle(matVer, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
+        Utils.matToBitmap(matVer, input);
+        
+        return input;
+		//Rect faceRect = new Rect();
 		// some code to detect face
 		
     };

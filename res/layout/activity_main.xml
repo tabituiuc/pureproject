@@ -27,14 +27,4 @@
         android:text="Client"
         android:width="300dp" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/enterServer"
-        android:layout_alignRight="@+id/enterServer"
-        android:layout_marginBottom="78dp"
-        android:layout_marginRight="80dp"
-        android:text="Button" />
-
 </RelativeLayout>
