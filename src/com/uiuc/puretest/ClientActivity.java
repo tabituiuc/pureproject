@@ -54,8 +54,6 @@ implements LoaderCallbackInterface {
 	 private Handler handler = new Handler();
 	 
 	 private Socket socket;
-
-	 private Mat tmp;
 	 
 	 private boolean openCVLoaded = false;
 	 
@@ -169,6 +167,7 @@ implements LoaderCallbackInterface {
     	Mat matVer = new Mat();
     	Mat grayscaleImage = new Mat(input.getHeight(), input.getWidth(), CvType.CV_8UC4);
 		Utils.bitmapToMat(input, matVer);
+		Mat matVer2 = matVer.clone();
         Imgproc.cvtColor(matVer, grayscaleImage, Imgproc.COLOR_RGBA2RGB);
         
         
@@ -183,11 +182,18 @@ implements LoaderCallbackInterface {
  
         // If there are any faces found, draw a rectangle around it
         Rect[] facesArray = faces.toArray();
+        Rect face = facesArray[0];
         for (int i = 0; i <facesArray.length; i++)
-            Core.rectangle(matVer, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
-        Utils.matToBitmap(matVer, input);
+            	face = facesArray[i];
+        		//Core.rectangle(matVer, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
+       
         
-        return input;
+        matVer2 = new Mat(matVer, face);
+        Bitmap input2 = Bitmap.createBitmap(matVer2.cols(), matVer2.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(matVer2, input2);
+        
+        
+        return input2;
 		//Rect faceRect = new Rect();
 		// some code to detect face
 		
